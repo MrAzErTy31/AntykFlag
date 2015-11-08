@@ -1,0 +1,11 @@
+name: AntykFlag
+main: fr.mrazerty31.antykflag.AntykFlag
+author: MrAzErTy31
+version: 0.0.1
+commands:
+  antykflag:
+    description: Commande du plugin.
+    usage: /antykflag <args>
+  kit:
+    description: Debug command.
+    usage: /kit <args>
