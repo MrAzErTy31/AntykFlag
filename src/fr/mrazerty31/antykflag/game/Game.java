@@ -1,6 +1,7 @@
 package fr.mrazerty31.antykflag.game;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.World;
@@ -9,11 +10,14 @@ import org.bukkit.entity.Player;
 import fr.mrazerty31.antykflag.config.ConfigHandler;
 
 public class Game {
+	public static final byte INIT = 0, PROGRESS = 1, FINISHED = 2;
 	private static Game currentGame;
 	private List<Team> teams = new ArrayList<Team>();
 	private List<AFPlayer> players = new ArrayList<AFPlayer>();
+	private HashMap<AFPlayer, Team> carriers = new HashMap<AFPlayer, Team>();
 	private World world;
 	private int currentTime, length;
+	private byte state = INIT;
 
 	public Game(World world, int time) {
 		this.world = world;
@@ -71,8 +75,30 @@ public class Game {
 		this.currentTime = time;
 	}
 	
+	public byte getState() {
+		return state;
+	}
+	
+	public void setState(byte state) {
+		this.state = state;
+	}
+	
+	public HashMap<AFPlayer, Team> getCarriers() {
+		return carriers;
+	}
+	
+	public void setCarriers(HashMap<AFPlayer, Team> carriers) {
+		this.carriers = carriers;
+	}
+	
 	public void serialize() {
 		ConfigHandler.serializeGame(this);
+	}
+	
+	public void start() {
+		setState(PROGRESS);
+		// TODO: TP TEAMS
+		// TODO: Show Scoreboard
 	}
 	
 	public static Game getCurrentGame() {

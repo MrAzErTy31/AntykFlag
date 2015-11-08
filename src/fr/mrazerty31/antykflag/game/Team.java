@@ -46,6 +46,10 @@ public class Team {
 		players.add(player);
 	}
 	
+	public void removePlayer(AFPlayer player) {
+		players.remove(player);
+	}
+	
 	public int getScore() {
 		return score;
 	}
@@ -70,5 +74,28 @@ public class Team {
 	
 	public static Team deserializeTeam(String team) {
 		return ConfigHandler.deserializeTeam(team);
+	}
+	
+	public static Team getTeam(String name) {
+		Team team = null;
+		try {
+			for(Team tm : Game.getCurrentGame().getTeams()) {
+				if(tm.getName().equalsIgnoreCase(name)) {
+					team = tm;
+				}
+			}
+		} catch(NullPointerException npe) {}
+		return team;
+	}
+	
+	public static boolean teamExists(String name) {
+		boolean exists = false;
+		try {
+			getTeam(name);
+			exists = true;
+		} catch(NullPointerException npe) {
+			exists = false;
+		}
+		return exists;
 	}
 }

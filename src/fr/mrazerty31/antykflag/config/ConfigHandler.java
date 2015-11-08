@@ -5,7 +5,9 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 
 import fr.mrazerty31.antykflag.AntykFlag;
 import fr.mrazerty31.antykflag.game.Game;
@@ -50,9 +52,11 @@ public class ConfigHandler {
 
 	public static List<Team> getTeamList() {
 		List<Team> teams = new ArrayList<Team>();
-		for(String team : AntykFlag.config.getConfigurationSection("game.teams").getKeys(false)) {
-			teams.add(deserializeTeam(team));
-		}
+		try {
+			for(String team : AntykFlag.config.getConfigurationSection("game.teams").getKeys(false)) {
+				teams.add(deserializeTeam(team));
+			}
+		} catch(NullPointerException npe) {}
 		return teams;
 	}
 
@@ -80,13 +84,30 @@ public class ConfigHandler {
 		ChatColor color = getTeamColor(team);
 		return new Team(name, color);
 	}
-	
+
 	public static boolean teamExists(String name) {
 		return AntykFlag.config.isConfigurationSection("game.teams."+name);
 	}
-	
+
 	public static void resetTeams() {
 		AntykFlag.config.set("game.teams", null);
+		AntykFlag.instance.saveConfig();
+	}
+
+	public static Block getBlockFlag(Team team) {
+		int x = AntykFlag.config.getInt("game.teams."+team.getName()+".block.x");
+		int y = AntykFlag.config.getInt("game.teams."+team.getName()+".block.y");
+		int z = AntykFlag.config.getInt("game.teams."+team.getName()+".block.z");
+
+		return getGameWorld().getBlockAt(new Location(getGameWorld(), x, y, z));
+	}
+
+	public static void setTeamFlag(Block block, Team team) {
+		Location location = block.getLocation();
+		AntykFlag.config.set("game.teams."+team.getName()+".block.x", location.getBlockX());
+		AntykFlag.config.set("game.teams."+team.getName()+".block.y", location.getBlockY());
+		AntykFlag.config.set("game.teams."+team.getName()+".block.z", location.getBlockZ());
+
 		AntykFlag.instance.saveConfig();
 	}
 }

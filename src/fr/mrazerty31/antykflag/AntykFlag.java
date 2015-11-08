@@ -7,6 +7,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.ScoreboardManager;
 
 import fr.mrazerty31.antykflag.config.ConfigHandler;
 import fr.mrazerty31.antykflag.game.Game;
@@ -20,6 +22,8 @@ import fr.mrazerty31.antykflag.util.Util;
 public class AntykFlag extends JavaPlugin {
 	public static AntykFlag instance;
 	public static FileConfiguration config;
+	public static ScoreboardManager sbManager;
+	public static Scoreboard scoreboard;
 
 	public void onEnable() {
 		instance = this;
@@ -27,6 +31,8 @@ public class AntykFlag extends JavaPlugin {
 		this.getServer().getPluginManager().registerEvents(new GUIListener(), this);
 		saveDefaultConfig();
 		config = this.getConfig();
+		sbManager = this.getServer().getScoreboardManager();
+		scoreboard = sbManager.getNewScoreboard();
 
 		Util.init();
 		Kit.register();
@@ -107,6 +113,17 @@ public class AntykFlag extends JavaPlugin {
 						} else {
 							p.sendMessage("§eUtilisation: /antykflag team <add, list, reset>");
 						}
+					} else if(args[0].equalsIgnoreCase("flag")) {
+						if(args.length == 2) {
+							if(Team.teamExists(args[1])) {
+								Team team = Team.getTeam(args[1]);
+								PlayerListener.settingTeam.put(p, team);
+								p.sendMessage("§aFaites clic droit sur le bloc drapeau de la team \""+team.getColor()+team.getName()+"§a\".");
+								p.sendMessage("§eFaites clique gauche pour annuler.");
+							}
+						}
+					} else if(args[0].equalsIgnoreCase("start")) {
+						Game.getCurrentGame().start();
 					} else {
 						p.sendMessage("§eUtilisation: /antykflag <set>");
 					}
@@ -128,6 +145,17 @@ public class AntykFlag extends JavaPlugin {
 					for(Kit kit : Kit.getKits()) {
 						sender.sendMessage(" §6- §l"+kit.getIcon().getItemMeta().getDisplayName());
 					}
+				}
+			}
+		} else if(cmd.getName().equalsIgnoreCase("teamselect")) {
+			if(args.length == 1) {
+				try {
+					Player player = Bukkit.getPlayer(args[0]);
+					player.openInventory(GUIHandler.getTeamSelector(player));
+				} catch(Exception ex) {}
+			} else {
+				if(sender instanceof Player) {
+					((Player) sender).openInventory(GUIHandler.getTeamSelector(((Player) sender)));
 				}
 			}
 		}

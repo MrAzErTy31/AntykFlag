@@ -1,5 +1,8 @@
 package fr.mrazerty31.antykflag.gui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -27,9 +30,10 @@ public class GUIHandler {
 	public static Inventory getTeamSelector(Player player) throws NullPointerException {
 		Inventory selector = Bukkit.createInventory(player, 9, "Sélection de team");
 		for(Team team : Game.getCurrentGame().getTeams()) {
-			selector.addItem(
-					ItemLib.createItem(Material.WOOL, 1, (short) Util.colors.get(team.getColor()), team.getColor()+team.getName(), null)
-					);
+			List<String> lore = new ArrayList<String>();
+			lore.add("§6§l"+team.getPlayers().size()+"§r§6 joueur(s)");
+		
+			selector.addItem(ItemLib.createItem(Material.WOOL, 1, (short) Util.colors.get(team.getColor()), team.getColor()+team.getName(), lore));
 		}
 		return selector;
 	}

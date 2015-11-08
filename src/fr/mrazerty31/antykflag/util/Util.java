@@ -20,7 +20,7 @@ public class Util {
 		colors.put(ChatColor.BLUE, (byte) 9);
 		colors.put(ChatColor.DARK_PURPLE, (byte) 10);
 		colors.put(ChatColor.DARK_BLUE, (byte) 11);
-		colors.put(ChatColor.DARK_RED, (byte) 13);
+		colors.put(ChatColor.DARK_GREEN, (byte) 13);
 		colors.put(ChatColor.RED, (byte) 14);
 		colors.put(ChatColor.BLACK, (byte) 15);
 	}

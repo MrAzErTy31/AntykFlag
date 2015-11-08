@@ -9,3 +9,7 @@ commands:
   kit:
     description: Debug command.
     usage: /kit <args>
+  teamselect:
+    description: Debug command.
+    usage: /teamselect <player>
+    aliases: tselect
